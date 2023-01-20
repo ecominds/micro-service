@@ -1,19 +1,17 @@
 spring:
   datasource:
-    url: jdbc:h2:./h2-data/rest_api
-    driverClassName: org.h2.Driver
-    username: sa
-    password:
+    url: jdbc:mysql://172.19.0.2:3306/boot_webapp
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: app_user
+    password: secured_passwd123
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     generate-ddl: true
     hibernate:
         ddl-auto: update
-    show-sql: true
+    show-sql: false
     properties:
-        hibernate.format_sql: true
-  h2:
-    console.enabled: true
+        hibernate.format_sql: false
 
 server:
   shutdown: graceful

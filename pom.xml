@@ -11,7 +11,7 @@
 
 	<groupId>com.github.ecominds</groupId>
 	<artifactId>boot-rest-api</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.4-SNAPSHOT</version>
 	<name>boot-rest-api</name>
 	<description>A simple springboot REST application</description>
 	
@@ -81,6 +81,13 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
 		</dependency>
 
 	</dependencies>
