@@ -1,2 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:h2:./h2-data/rest_api
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    generate-ddl: true
+    hibernate:
+        ddl-auto: update
+    show-sql: true
+    properties:
+        hibernate.format_sql: true
+  h2:
+    console.enabled: true
+
 server:
   shutdown: graceful
