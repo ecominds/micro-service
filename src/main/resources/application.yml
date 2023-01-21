@@ -3,7 +3,7 @@ spring:
     url: jdbc:mysql://172.19.0.2:3306/boot_webapp
     driverClassName: com.mysql.cj.jdbc.Driver
     username: app_user
-    password: secured_passwd123
+    password: ENC(bA8MQzQyTI8oD4YOWPeWlhrH1mtlLiTfCIbbbkSTsJkBBrOgFjyIUFYKRqqCo551ExcnDGeJN+m1P3Bg12/yyA==)
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     generate-ddl: true
