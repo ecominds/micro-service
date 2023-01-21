@@ -146,3 +146,51 @@ $ docker run -it -d --name=rest-api-with-mysql --network=dev-env-net -p 80:8080 
 ```
 
 4. verify the logs and test the application
+
+## Use encrypted credential in properties file
+The simplest way is to use the Jasypt library in order to improve security of Java applications based on Spring framework.
+
+1. Include the `Jasypt` dependency in `pom.xml`
+```
+<dependency>
+	<groupId>com.github.ulisesbocchio</groupId>
+	<artifactId>jasypt-spring-boot-starter</artifactId>
+	<version>3.0.3</version>
+</dependency>
+```
+
+2. Add the `@EnableEncryptableProperties` annotation in starter main class
+```
+@SpringBootApplication
+@Slf4j
+@EnableEncryptableProperties
+public class AppStarterMainClass
+```
+
+3. Change the database password from `plain text password` to `ENC(<encrypted password>)`. See below:
+```
+password: ENC(bA8MQzQyTI8oD4YOWPeWlhrH1mtlLiTfCIbbbkSTsJkBBrOgFjyIUFYKRqqCo551ExcnDGeJN+m1P3Bg12/yyA==)
+```
+
+The above encrypted password of `secured_passwd123` with secret key as `MySecretPwd`
+
+4. Set the secret key in environment properties/JVM parameter/docker runtime properties.
+
+* If running in eclipse or local system, include `-Djasypt.encryptor.password=MySecretPwd` in JVM paramater
+* If running in docker container, include `-e "jasypt.encryptor.password=MySecretPwd"` in `docker run` command. See below:
+```
+$ docker run -it -d --name=rest-api-with-mysql --network=dev-env-net -e "jasypt.encryptor.password=MySecretPwd" -p 80:8080 boot-rest-api
+```
+
+### Encrypt credential
+Add the below code snippet in main class to encrypt the password
+```
+@Autowired
+private StringEncryptor stringEnc;
+```
+and
+```
+System.out.println(stringEnc.encrypt("secured_passwd123"));
+```
+
+Note: Kindly note, use the same secret key to encrypt or decrypt the password
