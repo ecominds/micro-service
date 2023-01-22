@@ -131,7 +131,7 @@ The easiest step is to run both MySQL and springboot docker container in the sam
 
 1. Update the mysql jdbc datasource properties in `application.yml` and `build the maven project` so that the generated jar will contain the updated `application.yml` configuration. Ideally, the main change would be URL only if there is no changes in dbname or its credentials
 ```
-#Get IP of the running mysql instance. Ideally, it would be 172.19.0.2
+#Get IP of the running mysql instance. if it is 172.19.0.2, then
 jdbc.urlPath = jdbc:mysql://172.19.0.2:3306/boot_webapp
 ```
 
@@ -194,3 +194,93 @@ System.out.println(stringEnc.encrypt("secured_passwd123"));
 ```
 
 Note: Kindly note, use the same secret key to encrypt or decrypt the password
+
+## Externalize application configuration proerties file
+1. First, lets put dynamic attributes in `application.yml` for the database details
+```
+spring:
+  datasource:
+    url: ${jdbc.url-path}
+    driverClassName: ${jdbc.driver}
+    username: ${jdbc.user-name}
+    password: ${jdbc.passwd}
+  jpa:
+    database-platform: ${jdbc.dialect}
+    generate-ddl: true
+    hibernate:
+        ddl-auto: update
+    show-sql: ${jdbc.sql-show}
+    properties:
+        hibernate.format_sql: ${jdbc.sql-show}
+```
+
+2. Create a file `app_custom_config.yml` (either `yml`or similar `.properties`) file with the replacement for the above dynamic attributes.
+```
+jdbc: 
+  dialect: org.hibernate.dialect.MySQL8Dialect
+  driver: com.mysql.cj.jdbc.Driver
+  url-path: jdbc:mysql://localhost:3306/boot_webapp
+  user-name: app_user
+  passwd: ENC(bA8MQzQyTI8oD4YOWPeWlhrH1mtlLiTfCIbbbkSTsJkBBrOgFjyIUFYKRqqCo551ExcnDGeJN+m1P3Bg12/yyA==)
+  sql-show: false
+```
+
+Note: `localhost` is used if running in some IDE or local system. To run the application in docker container, `IP` of the `MySQL` instance should be used. i.e. `172.19.0.2`
+
+### Configure in non-docker application, i.e, IDE, local-env, unix/windows box etc
+Include the `spring.config.additional-location=<.yml|.properties path>` to JVM parameter. i.e:
+```
+-Dspring.config.additional-location=D:\setup\git-repo\micro-service\app_custom_config.yml
+```
+
+### Configure an environment specific file to docker application.
+I have followed the below approach, if you find a better one, kindly do let me know.
+
+* Create a volume, lets say `boot_dev_nfs`
+* Copy the local file containining the environment specific attributes to the above created volume `boot_dev_nfs`
+* Run the docker container with required paramaters
+
+Note: If we donot have any option to manage the the volume, we can create a docker container and then after copying the config file to the volume, delete the container (if not in use).
+
+1. First, include `VOLUME /tmp` the Dockerfile. See the updated content:
+```
+# Dockerfile content
+FROM openjdk:8-jdk-alpine
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} rest-api.jar
+VOLUME /tmp
+ENTRYPOINT ["java","-jar","/rest-api.jar"]
+```
+
+2. Re-build the docker image with the above changes
+```
+$ docker build -t boot-rest-api .
+```
+
+3. The below syntax will create: 
+* docker container with name `boot-rest-api` and required paramaters to run the container
+* a volume `local_dev_nfs` and also 
+* map the volume to container
+
+```
+$ docker container create --name rest-api-app -v local_dev_nfs:/tmp -e "spring.config.additional-location=/tmp/app_config.yml" -e "jasypt.encryptor.password=MySecretPwd" --network=dev-env-net -p 80:8080 boot-rest-api
+```
+
+4. Now, copy the environment configuration file to the volume `local_dev_nfs` which will be used by the container application `rest-api-app` 
+```
+$ docker cp D:\setup\git-repo\micro-service\app_custom_config.yml rest-api-app:/tmp/app_config.yml
+```
+Note: The above command will eventually copy the `app_config.yml` file to the volume `local_dev_nfs`. Hence, even if we now delete the container, the configuration file in `local_dev_nfs` volume.
+
+5. Execute the `start` command to run the container
+```
+$ docker start rest-api-app
+```
+Or, if we have deleted the container `rest-api-app`, execute the below command to run it (replaced `container create` to `run -d -it`)
+```
+$ docker run -d -it --name rest-api-app -v local_dev_nfs:/tmp -e "spring.config.additional-location=/tmp/app_config.yml" -e "jasypt.encryptor.password=MySecretPwd" --network=dev-env-net -p 80:8080 boot-rest-api
+```
+
+### And that's it! :sparkles:
+
+If you'd like help troubleshooting a PR, have a great new idea, or want to share something amazing you've learned in our docs, join us in the [discussions](https://github.com/ecominds/micro-service/discussions/)

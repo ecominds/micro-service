@@ -11,7 +11,7 @@
 
 	<groupId>com.github.ecominds</groupId>
 	<artifactId>boot-rest-api</artifactId>
-	<version>0.0.4-SNAPSHOT</version>
+	<version>0.0.5-SNAPSHOT</version>
 	<name>boot-rest-api</name>
 	<description>A simple springboot REST application</description>
 	
