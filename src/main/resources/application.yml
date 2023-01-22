@@ -1,17 +1,17 @@
 spring:
   datasource:
-    url: jdbc:mysql://172.19.0.2:3306/boot_webapp
-    driverClassName: com.mysql.cj.jdbc.Driver
-    username: app_user
-    password: secured_passwd123
+    url: ${jdbc.url-path}
+    driverClassName: ${jdbc.driver}
+    username: ${jdbc.user-name}
+    password: ${jdbc.passwd}
   jpa:
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+    database-platform: ${jdbc.dialect}
     generate-ddl: true
     hibernate:
         ddl-auto: update
-    show-sql: false
+    show-sql: ${jdbc.sql-show}
     properties:
-        hibernate.format_sql: false
+        hibernate.format_sql: ${jdbc.sql-show}
 
 server:
   shutdown: graceful

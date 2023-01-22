@@ -1,0 +1,7 @@
+jdbc: 
+  dialect: org.hibernate.dialect.MySQL8Dialect
+  driver: com.mysql.cj.jdbc.Driver
+  url-path: jdbc:mysql://172.19.0.2:3306/boot_webapp
+  user-name: app_user
+  passwd: ENC(bA8MQzQyTI8oD4YOWPeWlhrH1mtlLiTfCIbbbkSTsJkBBrOgFjyIUFYKRqqCo551ExcnDGeJN+m1P3Bg12/yyA==)
+  sql-show: false

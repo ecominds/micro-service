@@ -11,7 +11,7 @@
 
 	<groupId>com.github.ecominds</groupId>
 	<artifactId>boot-rest-api</artifactId>
-	<version>0.0.4-SNAPSHOT</version>
+	<version>0.0.5-SNAPSHOT</version>
 	<name>boot-rest-api</name>
 	<description>A simple springboot REST application</description>
 	
@@ -88,6 +88,12 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.github.ulisesbocchio</groupId>
+			<artifactId>jasypt-spring-boot-starter</artifactId>
+			<version>3.0.3</version>
 		</dependency>
 
 	</dependencies>
