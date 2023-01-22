@@ -257,10 +257,10 @@ ENTRYPOINT ["java","-jar","/rest-api.jar"]
 $ docker build -t boot-rest-api .
 ```
 
-3. The below syntax will create: 
-* docker container with name `boot-rest-api` and required paramaters to run the container
-* a volume `local_dev_nfs` and also 
-* map the volume to container
+3. The below syntax will: 
+* create a docker container with name `boot-rest-api` and required paramaters to run the container
+* create a volume `local_dev_nfs` 
+* and map the volume to the container `boot-rest-api` path
 
 ```
 $ docker container create --name rest-api-app -v local_dev_nfs:/tmp -e "spring.config.additional-location=/tmp/app_config.yml" -e "jasypt.encryptor.password=MySecretPwd" --network=dev-env-net -p 80:8080 boot-rest-api
@@ -270,7 +270,7 @@ $ docker container create --name rest-api-app -v local_dev_nfs:/tmp -e "spring.c
 ```
 $ docker cp D:\setup\git-repo\micro-service\app_custom_config.yml rest-api-app:/tmp/app_config.yml
 ```
-Note: The above command will eventually copy the `app_config.yml` file to the volume `local_dev_nfs`. Hence, even if we now delete the container, the configuration file in `local_dev_nfs` volume.
+Note: The above command will eventually copy the `app_config.yml` file to the volume `local_dev_nfs`. Hence, even if we now delete the container, the configuration file in `local_dev_nfs` volume will be there.
 
 5. Execute the `start` command to run the container
 ```
