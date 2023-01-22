@@ -242,7 +242,7 @@ I have followed the below approach, if you find a better one, kindly do let me k
 
 Note: If we donot have any option to manage the the volume, we can create a docker container and then after copying the config file to the volume, delete the container (if not in use).
 
-1. First, include `VOLUME /tmp` the Dockerfile. See the updated content:
+1. First, include `VOLUME /tmp` in the Dockerfile. See the updated content:
 ```
 # Dockerfile content
 FROM openjdk:8-jdk-alpine
