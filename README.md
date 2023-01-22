@@ -131,7 +131,7 @@ The easiest step is to run both MySQL and springboot docker container in the sam
 
 1. Update the mysql jdbc datasource properties in `application.yml` and `build the maven project` so that the generated jar will contain the updated `application.yml` configuration. Ideally, the main change would be URL only if there is no changes in dbname or its credentials
 ```
-#Get IP of the running mysql instance. if, it it is 172.19.0.2, then
+#Get IP of the running mysql instance. if it is 172.19.0.2, then
 jdbc.urlPath = jdbc:mysql://172.19.0.2:3306/boot_webapp
 ```
 
